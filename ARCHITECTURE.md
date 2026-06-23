@@ -1,4 +1,4 @@
-﻿# careOS Architecture (Interview-Ready)
+# careOS Architecture (Interview-Ready)
 
 This document explains the key architectural decisions that make careOS a production-grade, defensible clinical AI platform rather than a prototype.
 
@@ -56,6 +56,7 @@ This is the mechanism that makes the platform defensible to compliance officers 
 Workflows that matter (`discharge_planning`, `prior_authorization`, any medium/high risk) create a `HumanReviewTask`.
 
 The workflow literally cannot complete until the task reaches `approved` or `rejected`.
+This is backed by a PostgreSQL database in production, ensuring that review tasks are persistent, strongly consistent, and isolated by tenant ID. Role-based access ensures that only clinicians can review clinical tasks, while compliance officers can audit all tasks.
 
 This is not a UI banner — it is a hard gate in the orchestration layer.
 
@@ -83,11 +84,19 @@ Every external dependency has a clean interface:
 
 This allows a 5-minute `docker compose up` experience while preserving an identical path to real AWS Bedrock + OpenSearch + Cognito.
 
-## 9. Audit as a First-Class Data Product
+## 9. Audit and Observability
 
 Every PHI touch, route decision, MCP decision, LLM call, and human review action produces an immutable `audit_event`.
 
 Chat history stores only references + minimized metadata. Raw clinical text lives in governed RAG chunks.
+
+**Tracing & Logging**: The API is instrumented with **OpenTelemetry** for end-to-end distributed tracing. Logs are structured (JSON) and routed to AWS CloudWatch Log Groups. AWS CloudTrail is configured via Terraform to track all control plane and S3 data events for compliance audits.
+
+## 10. Frontend Enterprise Auth
+
+The Next.js frontend uses a unified authentication strategy via **NextAuth.js**.
+- **Production**: Configured with an AWS Cognito OAuth 2.0 PKCE provider to map Hospital SSO identities into the app. Custom claims (`custom:role`, `custom:tenant_id`) are injected into the session.
+- **Local Dev**: A seamless fallback to local mock users for rapid development.
 
 ## 10. Why This Architecture Is Production-Grade (Not a Demo)
 

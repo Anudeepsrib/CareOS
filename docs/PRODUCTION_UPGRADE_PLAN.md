@@ -1,4 +1,4 @@
-﻿# careOS - Production Upgrade Plan
+# careOS - Production Upgrade Plan
 
 ## Phase 1: Security and Authentication ✅ COMPLETE
 - [x] Implement AWS Cognito JWT validation using JWKS in `security.py`
@@ -30,8 +30,10 @@
 - [x] Terraform modules for CloudWatch Log Groups and CloudTrail audit trail
 - [x] Frontend `.env.example` for Cognito configuration
 
-## Phase 5: CI/CD and Final Polish ✅ HARDENED (this pass)
-- [x] Expanded GitHub Actions: stricter ruff (incl E,F,W,I etc), ruff format check, bandit SAST, pip-audit (high+), npm audit (high+), hadolint Docker lint, trivy severity HIGH/CRITICAL block, basic secret pattern scan, coverage reporting.
+## Phase 5: CI/CD and Final Polish ✅ COMPLETE
+- [x] Update GitHub Actions for strict linting/testing
+- [x] Update all documentation (ARCHITECTURE.md, SECURITY.md, etc.)
+- [x] End-to-end integration tests
 - [x] Added enterprise middleware: RequestSizeLimit (10MB default, configurable), RequestTimeout (45s), enhanced TenantIsolation with early ABAC/path guards.
 - [x] PHI/PII redaction processor in structlog (key + regex patterns + truncation for long clinical text).
 - [x] Docker hardening: .dockerignore root+web, improved non-root (uid 1001 early), labels, minimal system pkgs, secret file support, health on /ready, --no-access-log, resource hints in compose.
