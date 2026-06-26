@@ -32,7 +32,7 @@ export default function Home() {
       <header className="bg-slate-900 border-b border-slate-800 h-14 px-6 flex items-center justify-between shrink-0 shadow-sm z-10">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-            MediCore AI
+            careOS
           </h1>
           <div className="h-4 w-px bg-slate-700"></div>
           <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-800/50 px-2.5 py-1 rounded-md border border-slate-700/50">
@@ -50,12 +50,12 @@ export default function Home() {
                 onChange={(e) => login(e.target.value)}
                 className="bg-slate-800 text-slate-200 text-xs px-2 py-1 rounded border border-slate-700 outline-none"
               >
-                <option value="clinician@hospital-a.demo">Dr. Smith (Cardiology)</option>
-                <option value="nurse@hospital-a.demo">Nurse Joy (Triage)</option>
-                <option value="care_coordinator@hospital-a.demo">Care Coordinator</option>
-                <option value="admin@hospital-a.demo">Hospital Admin</option>
-                <option value="compliance@hospital-a.demo">Compliance Officer</option>
-                <option value="patient@hospital-a.demo">Maria (Patient Portal)</option>
+                <option value="clinician@hospital-a.demo">Dr. Sarah Chen (Clinician)</option>
+                <option value="nurse@hospital-a.demo">James Rivera, RN (Nurse)</option>
+                <option value="care_coordinator@hospital-a.demo">Aisha Patel (Care Coordinator)</option>
+                <option value="admin@hospital-a.demo">Robert Kim (Admin)</option>
+                <option value="compliance@hospital-a.demo">Elena Vasquez (Compliance)</option>
+                <option value="patient@hospital-a.demo">Maria Gonzalez (Patient)</option>
               </select>
             </div>
           )}

@@ -89,7 +89,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 app = FastAPI(
     title="careOS Platform API",
     description=(
-        "HIPAA-compliant, multi-tenant clinical AI platform. "
+        "HIPAA-aware, multi-tenant clinical AI reference platform. "
         "Never diagnoses, prescribes, or makes final clinical decisions. "
         "All outputs for safety-sensitive workflows require human review."
     ),

@@ -18,7 +18,7 @@
 ### Intent Classification (Claude Haiku style)
 
 ```
-You are an expert clinical intent classifier for a HIPAA-compliant hospital AI system.
+You are an expert clinical intent classifier for a HIPAA-aware hospital AI reference system.
 
 Classify the user's query into one of the following routes:
 - simple_llm

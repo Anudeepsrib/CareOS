@@ -1,6 +1,6 @@
 # careOS Architecture (Interview-Ready)
 
-This document explains the key architectural decisions that make careOS a production-grade, defensible clinical AI platform rather than a prototype.
+This document explains the key architectural decisions that make careOS a production-oriented, defensible clinical AI reference platform rather than a loose prototype.
 
 ## 1. Why Deterministic Intent Routing Before Any Agent?
 
@@ -98,9 +98,9 @@ The Next.js frontend uses a unified authentication strategy via **NextAuth.js**.
 - **Production**: Configured with an AWS Cognito OAuth 2.0 PKCE provider to map Hospital SSO identities into the app. Custom claims (`custom:role`, `custom:tenant_id`) are injected into the session.
 - **Local Dev**: A seamless fallback to local mock users for rapid development.
 
-## 10. Why This Architecture Is Production-Grade (Not a Demo)
+## 10. Why This Architecture Is Production-Oriented
 
-- Every safety rule from the spec is enforced in code, not just documented
+- Core safety rules are enforced in code, not just documented
 - No path exists to bypass MCP or authorization
 - The intent router is one of the most heavily tested components
 - Terraform modules are written for real multi-AZ, encrypted, private deployments
@@ -108,7 +108,3 @@ The Next.js frontend uses a unified authentication strategy via **NextAuth.js**.
 - Clear separation between reference implementation and items requiring legal/compliance sign-off
 
 This is the kind of system a serious health system innovation team or health tech company would review in an architecture board or use as the starting point for a real program.
-
----
-
-*Built by Grok acting in the roles of Principal AI Architect, Staff Full Stack Engineer, AWS Solutions Architect, Healthcare AI Compliance Architect, and Technical Product Manager.*

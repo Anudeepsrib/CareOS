@@ -1,8 +1,16 @@
 # Gap Closure Status
 
-Last updated: 2026-06 (enterprise hardening pass)
+Last updated: 2026-06-26 (recruiter case-study hardening pass)
 
-## Closed In This Pass (Enterprise Hardening - Senior FSD Pass)
+## Closed In This Pass (Recruiter Case-Study Hardening)
+
+- Reworked README into an executive flagship case study with CI/test badges, implemented-vs-planned matrix, architecture diagram, RBAC matrix, synthetic demo workflow, audit example, threat model summary, screenshots, and a 5-minute script.
+- Added `docs/CASE_STUDY.md`, `docs/DEMO_SCRIPT_5_MIN.md`, `docs/GAP_CLOSURE_CHECKLIST.md`, `docs/diagrams/13_recruiter_case_study_architecture.mmd`, and PHI-safe screenshot assets.
+- Added `CHANGELOG.md` with the case-study hardening entry.
+- Replaced broad HIPAA compliance claims with HIPAA-aware reference-control language where formal audit evidence is not present.
+- Fixed careOS branding drift in the frontend and added the missing `apps/web/src/lib/api.ts` demo API client.
+
+## Previously Closed (Enterprise Hardening - Senior FSD Pass)
 
 - CI/CD enterprise hardening: bandit SAST, pip-audit, npm-audit, hadolint, stricter ruff+format, coverage, secret grep scan, trivy severity enforcement.
 - Added RequestSizeLimitMiddleware and RequestTimeoutMiddleware (configurable, fail closed).

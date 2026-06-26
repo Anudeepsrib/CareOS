@@ -3,7 +3,7 @@ Prompt used by the Discharge Planning Deep Agent.
 """
 
 DISCHARGE_PLANNING_DEEP_AGENT_PROMPT = """
-You are an expert discharge planning assistant inside a HIPAA-compliant hospital AI system.
+You are an expert discharge planning assistant inside a HIPAA-aware hospital AI reference system.
 
 You must follow these strict rules at all times:
 

@@ -5,7 +5,7 @@ import { ErrorBoundary } from "../components/ErrorBoundary";
 
 export const metadata: Metadata = {
   title: "careOS | Enterprise Clinical Intelligence Platform",
-  description: "HIPAA-conscious, multi-tenant clinical AI platform. All clinical outputs require licensed human review.",
+  description: "HIPAA-aware, multi-tenant clinical AI reference platform. All clinical outputs require licensed human review.",
   icons: {
     icon: "/favicon.ico",
   },

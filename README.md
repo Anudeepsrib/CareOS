@@ -1,176 +1,195 @@
-﻿# careOS
+# careOS
 
-**Enterprise-Grade, HIPAA-Compliant AI Platform for Hospitals and Health Systems**
+[![CI](https://github.com/Anudeepsrib/CareOS/actions/workflows/ci.yml/badge.svg)](https://github.com/Anudeepsrib/CareOS/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
+![FastAPI](https://img.shields.io/badge/API-FastAPI-009688)
+![Next.js](https://img.shields.io/badge/Web-Next.js%2015-black)
+![Controls](https://img.shields.io/badge/HIPAA--aware-reference%20controls-6b7280)
 
-careOS is the governed hospital AI platform implemented in this repository. It provides a production-oriented reference implementation for deploying large language models against sensitive patient data while enforcing strict clinical safety, privacy, consent, and governance controls.
+careOS is a recruiter-ready flagship case study for a governed hospital AI platform. It demonstrates how to route clinical AI requests through deterministic safety controls, tenant-aware retrieval, human review, audit logging, and role-scoped UI workflows before any model output reaches a user.
 
-The platform is designed as a multi-tenant clinical AI system for hospitals and health systems, with deterministic routing, MCP governance, human review, and auditability built into the core workflow.
+This repository is a **HIPAA-aware reference implementation**, not a product certified as compliant with HIPAA. It maps to relevant Privacy and Security Rule safeguards, but production use with real PHI would still require formal risk analysis, BAAs, clinical validation, live AWS evidence, penetration testing, and organizational policy sign-off.
 
-> **Critical Clinical Safety Rule**: This system **never** diagnoses, prescribes, or makes final clinical decisions. It summarizes, retrieves, flags risk signals, drafts for review, and always requires human oversight for safety-sensitive outputs.
+> **Clinical Safety Rule**: careOS never diagnoses, prescribes, or makes final clinical decisions. It summarizes authorized records, flags risk signals, drafts workflow artifacts for review, and escalates safety-sensitive outputs to licensed human review.
 
-## What Makes This Different
+## Executive Summary
 
-- **Deterministic Intent Router first** — Agents are never used for routing decisions.
-- **Mandatory MCP Context Governance Layer** — No PHI reaches an LLM without explicit minimization, consent enforcement, role adaptation, and human-review flagging.
-- **LangGraph-native agentic workflows** with first-class Human-in-the-Loop.
-- **Deep defense-in-depth**: RBAC + ABAC + tenant isolation + minimum-necessary + audit on every path.
-- **Local runnable in 5 minutes** with production-identical architecture (mocked Bedrock/OpenSearch/Cognito using clean abstractions).
+Health systems want the productivity of AI without letting PHI, unsafe clinical advice, or unaudited agent behavior slip through the cracks. careOS solves that as a reference architecture:
 
-## Quick Start (Local Development) — 5 Minutes
+- **Deterministic router first**: safety-critical requests are classified before any agent is invoked.
+- **MCP governance as the model gate**: tenant, patient, consent, role, and prompt-injection checks decide what context may reach an LLM.
+- **LangGraph and Deep Agents where they add value**: chart summary, risk signal, discharge planning, prior authorization, patient-message triage, hospital operations, and compliance review are modeled as governed workflows.
+- **Human review as a state machine**: medium/high-risk outputs create review tasks instead of relying on UI warnings.
+- **Auditability by design**: route decisions, review events, and model-governance metadata are recorded through an audit service.
+- **Production-oriented AWS path**: Terraform modules model private networking, KMS, Cognito, RDS, OpenSearch, Redis, S3, ECS, WAF, CloudTrail, CloudWatch, and service-scoped IAM.
+
+For the long-form case study, see [docs/CASE_STUDY.md](docs/CASE_STUDY.md).
+
+## Implemented vs Planned Matrix
+
+| Capability | Status | Evidence |
+| --- | --- | --- |
+| Deterministic intent routing with safety overrides | Implemented | `services/platform-api/app/services/intent_router/service.py`, `tests/unit/test_intent_router/test_router.py` |
+| Mandatory MCP context governance before model calls | Implemented | `services/platform-api/app/services/mcp/service.py`, `tests/unit/test_mcp/test_mcp_governance.py` |
+| Tenant-aware RBAC/ABAC context | Implemented | `services/platform-api/app/core/context.py`, `services/platform-api/app/core/middleware.py` |
+| Human review queue and role-filtered resolution | Implemented with DB path and local fallback | `services/platform-api/app/api/v1/reviews.py`, `tests/unit/test_reviews/test_review_authorization.py` |
+| Audit event capture and query endpoints | Implemented with DB path and local fallback | `services/platform-api/app/services/audit/service.py`, `services/platform-api/app/api/v1/audit.py` |
+| Governed Hindsight Memory | Implemented for non-authoritative workflow continuity | `services/memory_service/app/services/hindsight_memory_service.py`, `tests/unit/test_memory/` |
+| Next.js demo for chat, workflows, review queue, ingestion | Implemented as a single consolidated demo surface | `apps/web/src/app/page.tsx`, `apps/web/src/components/` |
+| CI for backend, frontend, Terraform, and security checks | Implemented as GitHub Actions reference workflow | `.github/workflows/ci.yml` |
+| AWS production reference modules | Implemented as Terraform reference modules | `infra/terraform/modules/`, `infra/terraform/envs/` |
+| Live AWS deployment evidence | Planned | Needs account-specific `terraform plan/apply`, Cognito MFA checks, Bedrock/OpenSearch integration tests |
+| Formal HIPAA attestation, SOC 2, HITRUST, BAA package | Planned | Requires external audit/legal evidence; intentionally not claimed in repo |
+| Full EHR/FHIR integration and production ingestion worker | Planned | See [docs/GAP_CLOSURE_CHECKLIST.md](docs/GAP_CLOSURE_CHECKLIST.md) |
+
+## Architecture Diagram
+
+```mermaid
+flowchart TB
+    UI["Next.js role-aware UI"]
+    Auth["Auth + RBAC/ABAC middleware"]
+    Router["Deterministic intent router"]
+    MCP["MCP context governance"]
+    RAG["Tenant-filtered RAG retrieval"]
+    Model["Model router<br/>mock local or Bedrock path"]
+    Graphs["LangGraph workflows"]
+    Agents["Deep Agents<br/>complex clinical workflows"]
+    Review["Human review queue"]
+    Audit["Audit event service"]
+    Memory["Governed Hindsight Memory"]
+    Data["Postgres/pgvector local<br/>RDS/OpenSearch/S3 reference path"]
+
+    UI --> Auth --> Router --> MCP
+    MCP --> RAG --> Data
+    MCP --> Model
+    MCP --> Graphs --> Agents
+    Graphs --> Review --> Audit
+    Agents --> Memory --> MCP
+    MCP --> Audit
+    RAG --> Audit
+```
+
+The source diagram is versioned at [docs/diagrams/13_recruiter_case_study_architecture.mmd](docs/diagrams/13_recruiter_case_study_architecture.mmd).
+
+## Role and RBAC Matrix
+
+| Role | Demo account | Patient PHI access | Workflows | Review queue | Audit scope |
+| --- | --- | --- | --- | --- | --- |
+| Patient | `patient@hospital-a.demo` | Own records only | Patient-safe chat and education | None | Own request trail only |
+| Nurse | `nurse@hospital-a.demo` | Assigned patients | Risk signal detection | Clinical tasks visible by role policy | Patient-care events for assigned scope |
+| Clinician | `clinician@hospital-a.demo` | Assigned or tenant-authorized patients | 72h chart summary, safety triage | Clinical task approval/rejection | Patient-care events for assigned scope |
+| Care coordinator | `care_coordinator@hospital-a.demo` | Assigned or tenant-authorized patients | Discharge planning | Care-coordination task approval/rejection | Workflow events for assigned scope |
+| Admin | `admin@hospital-a.demo` | No blanket clinical PHI access | De-identified operations | Admin/operations tasks only | Operational metadata |
+| Compliance officer | `compliance@hospital-a.demo` | Metadata and de-identified investigation by default | Compliance review | Can view and resolve review metadata | Tenant audit events |
+
+## Synthetic PHI-Safe Demo Workflow
+
+All demo data is fictional and seeded for local testing only. Do not add real patient records, real MRNs, real dates of birth, or live credentials to the repo.
 
 ```bash
-git clone <this-repo>
-cd careOS
-cp .env.example .env
 docker compose up --build
 ```
 
-**What happens automatically:**
-- Postgres + pgvector + Redis start
-- Backend runs migrations + seeds rich synthetic clinical data
-- Next.js frontend starts
+Open `http://localhost:3000/?demo=true`, then:
 
-**Access:**
-- **Best experience:** http://localhost:3000
-- **API docs:** http://localhost:8000/docs
+1. Use `clinician@hospital-a.demo` and ask for a 72-hour chart summary for `pat_001`.
+2. Switch to `care_coordinator@hospital-a.demo` and run the discharge planning workflow.
+3. Open the review queue and inspect the human-review task created by the workflow.
+4. Switch to `patient@hospital-a.demo` and ask a safety-sensitive question such as "Should I be worried about chest pain?"
+5. Switch to `admin@hospital-a.demo` or `compliance@hospital-a.demo` and inspect de-identified operations/compliance behavior.
 
-**Demo Users (switch freely):**
-- `clinician@hospital-a.demo` — Dr. Sarah Chen
-- `patient@hospital-a.demo` — Maria Gonzalez
-- `nurse@hospital-a.demo`
-- `care_coordinator@hospital-a.demo`
-- `admin@hospital-a.demo`
-- `compliance@hospital-a.demo`
+For a timed walkthrough, use [docs/DEMO_SCRIPT_5_MIN.md](docs/DEMO_SCRIPT_5_MIN.md).
 
-### Recommended Demo Flow
+## Audit Log Example
 
-1. Login as **Clinician** → Ask for 72h chart summary (use sidebar button)
-2. Login as **Care Coordinator** → Run the real LangGraph Discharge Planning workflow → Go to Review Queue and approve
-3. Login as **Nurse** → Run Clinical Risk Signal Agent
-4. Login as **Patient** → Ask about lab results + the chest pain safety question
-5. Switch to **Admin** → Ask operational questions
-
-All responses go through the full Intent Router + MCP Governance stack.
-
-See `ARCHITECTURE.md` for the interview-ready deep explanation and `docs/RUNBOOK.md` for operations.
-
-## Architecture Highlights
-
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the full interview-ready explanation covering:
-- Why deterministic routing before agents
-- How MCP prevents PHI leakage
-- How hallucinations are systematically reduced
-- RBAC/ABAC + minimum necessary implementation
-- Human-in-the-loop design
-- LangGraph orchestration patterns
-- Production vs local provider abstractions
-
-### High-Level System Architecture
-
-```mermaid
-%%{init: {'theme': 'dark'}}%%
-flowchart TB
-    subgraph Client["Client Layer"]
-        UI[Next.js Frontend<br/>Role-aware Chat + Review Queue]
-    end
-
-    subgraph Platform["careOS Platform API (FastAPI)"]
-        direction TB
-        Auth[Auth + RBAC/ABAC Middleware]
-        Router[Deterministic Intent Router<br/>+ Safety Lexicon]
-        MCP[MCP Governance Layer<br/>Non-bypassable PHI Filter]
-        RAG[RAG Service<br/>pgvector / OpenSearch]
-        subgraph Agents["Agentic Layer"]
-            LG[LangGraph State Machines]
-            DA[LangChain Deep Agents<br/>(Planner-Executor-Critic)]
-        end
-        Memory[Hindsight Memory<br/>Governed + Audited]
-        Review[Human Review State Machine]
-        Audit[Immutable Audit Service]
-    end
-
-    subgraph External["External / AWS (Production)"]
-        Bedrock[AWS Bedrock<br/>Claude 3.5 Sonnet + Titan]
-        OS[OpenSearch Serverless]
-        RDS[(PostgreSQL + pgvector)]
-        S3[(S3 + KMS)]
-    end
-
-    UI --> Auth
-    Auth --> Router
-    Router --> MCP
-    MCP --> RAG
-    MCP --> LG
-    LG --> DA
-    DA --> MCP
-    RAG --> MCP
-    Memory --> MCP
-    LG --> Review
-    DA --> Memory
-    Review --> Audit
-    MCP --> Audit
-    RAG -.-> OS
-    RAG -.-> RDS
-    LG -.-> Bedrock
-    Memory -.-> RDS
-    Audit -.-> S3
+```json
+{
+  "id": "audit_demo_route_001",
+  "tenant_id": "tenant_hospital_a",
+  "user_id": "doc_001",
+  "event_type": "route_decision",
+  "resource_type": "conversation",
+  "resource_id": "conv_demo_001",
+  "patient_id": "pat_001",
+  "action": "ai_chat",
+  "outcome": "success",
+  "correlation_id": "demo-correlation-001",
+  "details": {
+    "route": "clinical_safety_triage",
+    "confidence": 0.98,
+    "requires_rag": true,
+    "requires_agent": true,
+    "requires_human_review": true,
+    "mcp_blocked_context_count": 1,
+    "mcp_audit_tags": ["mcp_governed", "safety_critical", "high_risk_workflow"]
+  }
+}
 ```
 
-> **Key Principle**: No path to an LLM exists that bypasses the MCP Governance layer. Deep Agents and Memory are strictly governed.
+## Threat Model Summary
 
----
+| Threat | Mitigation in repo | Remaining production work |
+| --- | --- | --- |
+| Cross-tenant PHI access | Tenant context, ABAC checks, MCP tenant validation, tenant-filtered retrieval | Live multi-tenant penetration test and row-level security validation |
+| Prompt injection through retrieved documents | MCP prompt-injection markers block contaminated chunks before model context | Red-team retrieval poisoning suite and model-specific jailbreak testing |
+| Unsafe patient-facing advice | Safety router, disclaimers, human review triggers, patient role transformations | Clinical safety board validation and patient-language legal review |
+| Over-privileged administrators | Admin role does not receive blanket clinical PHI access | Production IAM review and break-glass operations policy |
+| Missing audit trail | Audit service plus review-decision logging | Immutable storage configuration, retention policy, SIEM integration |
+| Supply-chain or IaC drift | CI SAST/dependency/IaC/container checks | Enforce all scanners as blocking after vulnerability triage |
 
-## Canonical Use Cases (All Implemented)
+## Screenshots
 
-1. Patient lab summary (simple_rag)
-2. Chest pain safety triage (clinical_safety_triage → agentic)
-3. 72-hour clinician chart summary
-4. Nurse overnight risk signal detection
-5. Care coordinator discharge readiness
-6. Admin delayed discharge operations intelligence (de-identified)
-7. General medical education question (simple_llm)
+These PHI-safe visual snapshots use synthetic UI content and are safe for recruiter portfolios:
 
-All routes demonstrate correct governance, citations, disclaimers, and human review triggers where required.
+![careOS governed chat screenshot](docs/screenshots/careos-chat-governance.svg)
 
-## Repository Structure
+![careOS workflow and review screenshot](docs/screenshots/careos-workflow-review.svg)
 
+See [docs/screenshots/README.md](docs/screenshots/README.md) for the screenshot inventory and regeneration notes.
+
+## 5-Minute Demo Script
+
+| Time | Story beat | What to show |
+| --- | --- | --- |
+| 0:00-0:45 | Executive framing | "This is a HIPAA-aware governed clinical AI reference platform, not a loose chatbot." |
+| 0:45-1:30 | Role switch and RBAC | Toggle patient, clinician, care coordinator, admin, and compliance roles. |
+| 1:30-2:20 | Governed RAG chat | Ask a chart-summary question and point to route, confidence, citations, disclaimer, and review flags. |
+| 2:20-3:20 | Agentic workflow | Run discharge planning and show the workflow pausing on human review. |
+| 3:20-4:10 | Audit and threat model | Show the audit example and explain MCP blocking, prompt-injection defense, and no blanket admin PHI. |
+| 4:10-5:00 | Close | Walk through implemented vs planned and name the evidence-backed production gaps. |
+
+## Run and Verify Locally
+
+```bash
+docker compose up --build
 ```
-careOS/
-├── apps/web/                    # Next.js 15 + TypeScript frontend
-├── services/platform-api/       # Primary FastAPI application (all logical services)
-├── services/ingestion-worker/   # Document processing service
-├── packages/                    # Shared types, utils, config
-├── infra/terraform/             # Complete modular AWS infrastructure
-├── .github/workflows/           # Full CI/CD (lint, test, security, deploy)
-├── docs/                        # All required documentation + 10 Mermaid diagrams
-└── tests/                       # Unit, integration, security, load
+
+Backend-focused verification:
+
+```bash
+python -m pytest tests/unit/test_mcp tests/unit/test_reviews tests/unit/test_auth -q
 ```
 
-## Status
+Frontend verification:
 
-This is a **reference-grade architectural implementation** designed for:
-- Engineering interviews (Principal/Staff level)
-- Architecture review boards
-- Health system innovation teams evaluating clinical AI
-- Educational purposes
+```bash
+cd apps/web
+npm run build
+```
 
-It is **not** a production deployment ready for real PHI without significant additional work (see [DEPLOYMENT.md](docs/DEPLOYMENT.md) and live AWS account + clinical validation).
+## Repository Map
 
-See [GAP_CLOSURE_STATUS.md](docs/GAP_CLOSURE_STATUS.md) for the latest implementation-hardening status and remaining production work.
-Enterprise hardening pass applied (CI security, middleware timeouts/size/tenant, PHI redaction logging, Docker non-root + secret files, config validation, frontend CSP/auth/client sanitization, DB pool, etc.). See PRODUCTION_UPGRADE_PLAN.md Phase 5.
+```text
+apps/web/                         Next.js demo experience
+services/platform-api/            FastAPI API, router, MCP, RAG, audit, review, auth
+services/agent_orchestration_service/  Deep Agent implementations and tools
+services/memory_service/          Governed Hindsight Memory service
+infra/terraform/                  AWS reference infrastructure modules and envs
+tests/                            Unit and integration tests for safety, auth, memory, reviews
+docs/                             Architecture, runbooks, case study, diagrams, demo script
+scripts/                          Canonical demo runner
+```
 
-**Deep technical guides:**
-- [Deep Agents & Hindsight Memory Integration](docs/deep-agents-and-hindsight-memory.html) — Architecture + code-level explanation with interactive diagrams.
-- [LinkedIn / Marketing Visual Deck](docs/careOS_LinkedIn.html) — Self-contained, beautiful single-file HTML with 4 production-accurate Mermaid block diagrams. Perfect for screenshots, carousels, or sharing the full visual story.
+## Compliance Notice
 
-## License & Compliance Notice
-
-For demonstration and educational use only. Any use with real patient data requires:
-- Legal/compliance review
-- Business Associate Agreements with AWS and any model providers
-- Clinical safety validation
-- Appropriate IRB/ethics oversight where applicable
-
----
-
-**Built to the highest standards of clinical AI safety and healthcare compliance architecture.**
+careOS is for demonstration, education, architecture review, and interview use. Any use with real patient data requires legal/compliance review, BAAs, formal risk analysis, clinical validation, production security testing, incident-response readiness, and live infrastructure evidence.

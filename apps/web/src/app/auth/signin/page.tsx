@@ -55,10 +55,10 @@ export default function SignInPage() {
             </a>
           </div>
 
-          {/* Compliance badge */}
+          {/* Reference controls badge */}
           <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-center gap-2 text-[10px] text-slate-500">
             <Shield className="w-3 h-3" />
-            HIPAA-conscious • SOC 2 aligned • End-to-end encryption
+            HIPAA-aware reference controls | SOC 2 roadmap | Encryption-ready architecture
           </div>
         </div>
 

@@ -1,0 +1,22 @@
+flowchart TB
+    UI["Next.js role-aware UI"]
+    Auth["Auth + RBAC/ABAC middleware"]
+    Router["Deterministic intent router"]
+    MCP["MCP context governance"]
+    RAG["Tenant-filtered RAG retrieval"]
+    Model["Model router<br/>mock local or Bedrock path"]
+    Graphs["LangGraph workflows"]
+    Agents["Deep Agents<br/>complex clinical workflows"]
+    Review["Human review queue"]
+    Audit["Audit event service"]
+    Memory["Governed Hindsight Memory"]
+    Data["Postgres/pgvector local<br/>RDS/OpenSearch/S3 reference path"]
+
+    UI --> Auth --> Router --> MCP
+    MCP --> RAG --> Data
+    MCP --> Model
+    MCP --> Graphs --> Agents
+    Graphs --> Review --> Audit
+    Agents --> Memory --> MCP
+    MCP --> Audit
+    RAG --> Audit

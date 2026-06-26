@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">careOS workflow and review screenshot</title>
+  <desc id="desc">Synthetic screenshot-style visual showing agent workflow execution and the human review queue.</desc>
+  <rect width="1280" height="720" fill="#020617"/>
+  <rect x="0" y="0" width="1280" height="56" fill="#0f172a"/>
+  <text x="32" y="36" fill="#67e8f9" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">careOS</text>
+  <text x="142" y="35" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">Agentic workflow and human review snapshot</text>
+  <rect x="966" y="14" width="248" height="28" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="982" y="33" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="12">Aisha Patel (care coordinator)</text>
+
+  <rect x="0" y="56" width="250" height="664" fill="#0b1120"/>
+  <text x="26" y="96" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">PLATFORM</text>
+  <rect x="20" y="116" width="210" height="42" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="54" y="142" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="14">RAG Chat</text>
+  <rect x="20" y="170" width="210" height="42" rx="8" fill="#082f49" stroke="#0e7490"/>
+  <text x="54" y="196" fill="#38bdf8" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600">Agent Workflows</text>
+  <rect x="20" y="224" width="210" height="42" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="54" y="250" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="14">Review Queue</text>
+
+  <rect x="286" y="96" width="420" height="584" rx="16" fill="#0f172a" stroke="#1e293b"/>
+  <text x="318" y="136" fill="#f1f5f9" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Agentic Workflows</text>
+  <text x="318" y="166" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">LangGraph workflows pause when clinical review is required.</text>
+
+  <rect x="318" y="204" width="356" height="102" rx="12" fill="#111827" stroke="#334155"/>
+  <text x="342" y="238" fill="#60a5fa" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">Deep Agent: Discharge Planning</text>
+  <text x="342" y="264" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Evaluates blockers, checklist, and safe draft summary.</text>
+  <rect x="342" y="276" width="152" height="22" rx="5" fill="#1e3a8a"/>
+  <text x="357" y="292" fill="#dbeafe" font-family="Segoe UI, Arial, sans-serif" font-size="11">workflow executed</text>
+
+  <rect x="318" y="330" width="356" height="102" rx="12" fill="#111827" stroke="#334155"/>
+  <text x="342" y="364" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">Clinical Risk Signal</text>
+  <text x="342" y="390" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Scans recent notes for deterioration signals.</text>
+
+  <rect x="318" y="456" width="356" height="178" rx="12" fill="#1f2937" stroke="#92400e"/>
+  <text x="342" y="490" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">Human Review Required</text>
+  <text x="342" y="518" fill="#fcd34d" font-family="Segoe UI, Arial, sans-serif" font-size="12">Task rev_demo_001 deposited into review queue.</text>
+  <text x="342" y="546" fill="#e5e7eb" font-family="Segoe UI, Arial, sans-serif" font-size="12">Blockers detected:</text>
+  <text x="362" y="572" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="12">- Oxygen authorization pending</text>
+  <text x="362" y="596" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="12">- Final transportation confirmation needed</text>
+
+  <rect x="748" y="96" width="486" height="584" rx="16" fill="#0f172a" stroke="#1e293b"/>
+  <text x="780" y="136" fill="#f1f5f9" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Human Review Queue</text>
+  <rect x="1104" y="114" width="86" height="30" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="1128" y="134" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="12">Refresh</text>
+
+  <rect x="780" y="174" width="410" height="220" rx="12" fill="#111827" stroke="#334155"/>
+  <rect x="806" y="198" width="132" height="24" rx="5" fill="#082f49"/>
+  <text x="821" y="215" fill="#7dd3fc" font-family="Consolas, monospace" font-size="11">DISCHARGE</text>
+  <rect x="950" y="198" width="110" height="24" rx="5" fill="#450a0a"/>
+  <text x="968" y="215" fill="#fca5a5" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700">HIGH PRIORITY</text>
+  <text x="806" y="254" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">Discharge readiness draft requires clinician review</text>
+  <text x="806" y="284" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Task ID: rev_demo_001</text>
+  <text x="806" y="306" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Patient: PAT-DEMO-001</text>
+  <text x="806" y="336" fill="#38bdf8" font-family="Segoe UI, Arial, sans-serif" font-size="12">View Context Snapshot</text>
+  <rect x="966" y="338" width="92" height="34" rx="7" fill="#065f46"/>
+  <text x="989" y="360" fill="#d1fae5" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Approve</text>
+  <rect x="1074" y="338" width="84" height="34" rx="7" fill="#7f1d1d"/>
+  <text x="1098" y="360" fill="#fee2e2" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Reject</text>
+
+  <rect x="780" y="424" width="410" height="174" rx="12" fill="#020617" stroke="#1e293b"/>
+  <text x="806" y="454" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">CONTEXT SNAPSHOT</text>
+  <text x="806" y="486" fill="#94a3b8" font-family="Consolas, monospace" font-size="12">{</text>
+  <text x="828" y="510" fill="#94a3b8" font-family="Consolas, monospace" font-size="12">"source": "langgraph_workflow",</text>
+  <text x="828" y="534" fill="#94a3b8" font-family="Consolas, monospace" font-size="12">"mcp_policy": "minimum_necessary_context_only",</text>
+  <text x="828" y="558" fill="#94a3b8" font-family="Consolas, monospace" font-size="12">"phi_status": "synthetic_demo_only"</text>
+  <text x="806" y="582" fill="#94a3b8" font-family="Consolas, monospace" font-size="12">}</text>
+
+  <rect x="780" y="624" width="410" height="32" rx="8" fill="#1f2937" stroke="#374151"/>
+  <text x="806" y="645" fill="#9ca3af" font-family="Segoe UI, Arial, sans-serif" font-size="12">Review decisions require notes and create audit events.</text>
+</svg>

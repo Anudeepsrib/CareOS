@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">careOS governed chat screenshot</title>
+  <desc id="desc">Synthetic screenshot-style visual showing role-aware chat, route metadata, citations, and human review controls.</desc>
+  <rect width="1280" height="720" fill="#020617"/>
+  <rect x="0" y="0" width="1280" height="56" fill="#0f172a"/>
+  <text x="32" y="36" fill="#67e8f9" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">careOS</text>
+  <text x="142" y="35" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">Metropolitan General Hospital / tenant_hospital_a</text>
+  <rect x="964" y="14" width="250" height="28" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="980" y="33" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="12">Dr. Sarah Chen (clinician)</text>
+
+  <rect x="0" y="56" width="250" height="664" fill="#0b1120"/>
+  <text x="26" y="96" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">PLATFORM</text>
+  <rect x="20" y="116" width="210" height="42" rx="8" fill="#082f49" stroke="#0e7490"/>
+  <text x="54" y="142" fill="#38bdf8" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600">RAG Chat</text>
+  <rect x="20" y="170" width="210" height="42" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="54" y="196" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="14">Agent Workflows</text>
+  <rect x="20" y="224" width="210" height="42" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="54" y="250" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="14">Review Queue</text>
+  <rect x="20" y="610" width="210" height="74" rx="8" fill="#0f172a" stroke="#1e293b"/>
+  <text x="34" y="635" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Architecture note</text>
+  <text x="34" y="657" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="11">Every model call is gated by</text>
+  <text x="34" y="674" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="11">MCP context governance.</text>
+
+  <rect x="250" y="56" width="1030" height="664" fill="#020617"/>
+  <rect x="250" y="56" width="1030" height="42" fill="#0f172a" stroke="#1e293b"/>
+  <text x="278" y="83" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600">Active Session</text>
+  <text x="1134" y="83" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="12">Clear History</text>
+
+  <rect x="730" y="128" width="480" height="54" rx="18" fill="#0284c7"/>
+  <text x="756" y="160" fill="#f8fafc" font-family="Segoe UI, Arial, sans-serif" font-size="15">Summarize the last 72 hours for PAT-DEMO-001 before rounds.</text>
+
+  <rect x="304" y="220" width="780" height="328" rx="16" fill="#0f172a" stroke="#334155"/>
+  <rect x="324" y="238" width="150" height="24" rx="5" fill="#1e293b"/>
+  <text x="338" y="255" fill="#cbd5e1" font-family="Consolas, monospace" font-size="12">chart_summary</text>
+  <text x="492" y="255" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="12">conf 94%</text>
+  <rect x="570" y="238" width="168" height="24" rx="5" fill="#451a03" stroke="#92400e"/>
+  <text x="584" y="255" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="12">human review ready</text>
+
+  <text x="324" y="296" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Governed clinical summary</text>
+  <text x="324" y="326" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="14">Synthetic patient has improving respiratory status, stable vitals, and two discharge blockers:</text>
+  <text x="344" y="354" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="14">1. Final home oxygen authorization remains pending.</text>
+  <text x="344" y="380" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="14">2. Transportation confirmation is needed before discharge readiness.</text>
+  <text x="324" y="420" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">This output is a draft summary for licensed clinician review, not a diagnosis or treatment decision.</text>
+
+  <line x1="324" y1="448" x2="1050" y2="448" stroke="#1e293b"/>
+  <text x="324" y="477" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">CITATIONS</text>
+  <rect x="324" y="492" width="214" height="34" rx="6" fill="#020617" stroke="#1e293b"/>
+  <text x="338" y="514" fill="#38bdf8" font-family="Consolas, monospace" font-size="12">progress_note</text>
+  <text x="552" y="514" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">Authorized governed context only</text>
+
+  <rect x="304" y="574" width="780" height="58" rx="10" fill="#111827" stroke="#374151"/>
+  <text x="324" y="599" fill="#9ca3af" font-family="Segoe UI, Arial, sans-serif" font-size="12">Standard disclaimer: summarize authorized records only. Not a diagnosis, prescription, or substitute for clinical judgment.</text>
+  <text x="324" y="620" fill="#a78bfa" font-family="Segoe UI, Arial, sans-serif" font-size="12">Governed memory preference applied: concise bullet summary format.</text>
+
+  <rect x="304" y="660" width="760" height="38" rx="12" fill="#020617" stroke="#334155"/>
+  <text x="326" y="684" fill="#64748b" font-family="Segoe UI, Arial, sans-serif" font-size="13">Ask anything about labs, discharge, risk, or general education...</text>
+  <rect x="1082" y="660" width="98" height="38" rx="12" fill="#0891b2"/>
+  <text x="1114" y="684" fill="#f8fafc" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Send</text>
+</svg>

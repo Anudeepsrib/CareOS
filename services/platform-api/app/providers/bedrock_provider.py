@@ -51,7 +51,7 @@ class BedrockProvider:
         ) if allowed_context else "No authorized clinical records were available for this query."
         
         system_prompt = (
-            "You are a clinical AI assistant operating under strict HIPAA-conscious constraints. "
+            "You are a clinical AI assistant operating under strict HIPAA-aware reference controls. "
             "You must only rely on the authorized context provided. "
             "You must never hallucinate clinical details. "
             f"The user role is: {user_role}. Adjust your tone appropriately. "
@@ -98,4 +98,3 @@ class BedrockProvider:
         except Exception as e:
             logger.error("bedrock_generation_failed", error=str(e), route=route)
             raise RuntimeError(f"AWS Bedrock generation failed: {e}") from e
-
