@@ -12,6 +12,8 @@ from typing import List, Dict, Any, Optional
 import sys
 from pathlib import Path
 
+from app.core.context import UserContext
+
 REPO_ROOT = next(
     (parent for parent in Path(__file__).resolve().parents if (parent / "services").exists()),
     Path.cwd(),
@@ -27,8 +29,6 @@ try:
 except Exception:
     HAS_FULL_MEMORY = False
     _FullHindsightService = None
-
-from app.core.context import UserContext
 
 
 class MemoryService:

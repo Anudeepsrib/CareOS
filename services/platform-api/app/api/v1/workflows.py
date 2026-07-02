@@ -1,10 +1,12 @@
+from typing import Dict, Any
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
-import uuid
 
-from app.core.context import get_current_user, get_current_tenant
+from app.agents.graphs.chart_summary import chart_summary_graph
+from app.agents.graphs.clinical_risk_signal import risk_signal_graph
 from app.agents.graphs.discharge_planning import discharge_graph
+from app.core.context import get_current_user
 
 # Mandatory Deep Agent layer (per architecture spec)
 try:
@@ -55,10 +57,6 @@ async def discharge_planning(req: WorkflowRequest, user=Depends(get_current_user
         "review_task_id": result.get("review_task_id"),
         "requires_human_review": result.get("requires_human_review", False),
     }
-
-
-from app.agents.graphs.clinical_risk_signal import risk_signal_graph
-from app.agents.graphs.chart_summary import chart_summary_graph
 
 
 @router.post("/chart-summary")

@@ -12,7 +12,7 @@ This is the reference for all future agentic workflows in careOS.
 
 from __future__ import annotations
 
-from typing import TypedDict, List, Optional, Dict, Any
+from typing import TypedDict, List, Optional, Dict
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
 

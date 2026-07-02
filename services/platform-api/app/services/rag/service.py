@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 from sqlalchemy import bindparam, text
-import json
 
 from app.db.session import async_session
 from app.core.context import UserContext

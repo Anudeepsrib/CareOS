@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from .base_deep_agent import BaseDeepAgent, DeepAgentContext, DeepAgentOutput
+from .base_deep_agent import BaseDeepAgent, DeepAgentOutput
 
 
 class HospitalOperationsDeepAgent(BaseDeepAgent):

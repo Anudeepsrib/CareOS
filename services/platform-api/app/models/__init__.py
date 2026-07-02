@@ -8,3 +8,24 @@ from .audit import AuditEvent, ConsentRecord
 from .conversation import Conversation, Message
 from .workflow import HumanReviewTask, AgentWorkflow, SafetyEvent
 from .memory import MemoryPolicyDecision, MemoryRecord
+
+__all__ = [
+    "AgentWorkflow",
+    "AuditEvent",
+    "Base",
+    "ConsentRecord",
+    "Conversation",
+    "Document",
+    "DocumentChunk",
+    "Encounter",
+    "Facility",
+    "Hospital",
+    "HumanReviewTask",
+    "MemoryPolicyDecision",
+    "MemoryRecord",
+    "Message",
+    "Patient",
+    "SafetyEvent",
+    "Tenant",
+    "User",
+]

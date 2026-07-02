@@ -6,7 +6,7 @@ This is the equivalent of MCP but for long-term memory.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 
 class MemoryGovernanceService:

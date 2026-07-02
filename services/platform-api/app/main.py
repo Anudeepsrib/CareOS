@@ -13,20 +13,17 @@ This is the primary service demonstrating all architectural patterns:
 
 from __future__ import annotations
 
-import logging
 import uuid
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 import structlog
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.config import settings, validate_runtime_settings
-from app.core.context import TenantContext, UserContext, set_request_context
 from app.core.exceptions import CareOSException, handle_careos_exception
 from app.core.logging import configure_logging
 from app.core.middleware import (
@@ -39,8 +36,7 @@ from app.core.middleware import (
     TenantIsolationMiddleware,
 )
 from app.api.v1 import router as api_v1_router
-from app.models.base import Base
-from app.db.session import engine, get_db
+from app.db.session import engine
 
 try:
     from opentelemetry import trace

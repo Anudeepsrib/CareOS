@@ -5,7 +5,6 @@ These tests prove that PHI cannot leak outside authorized scope.
 """
 
 import pytest
-import asyncio
 
 from app.services.mcp.service import MCPContextGovernanceService
 from app.core.context import UserContext

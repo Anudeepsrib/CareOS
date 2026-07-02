@@ -7,7 +7,7 @@ In production: swaps to real AWS Bedrock Claude via the same interface.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 from app.core.config import settings
 from app.providers.bedrock_provider import BedrockProvider
 

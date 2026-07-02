@@ -8,7 +8,6 @@ Production: Amazon Titan Text Embeddings v2 via Bedrock (same interface)
 from __future__ import annotations
 
 from typing import List
-import numpy as np
 
 try:
     from sentence_transformers import SentenceTransformer

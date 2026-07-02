@@ -12,7 +12,6 @@ These run on EVERY request and are the primary enforcement points for:
 from __future__ import annotations
 
 import asyncio
-import time
 import uuid
 from typing import Callable, Awaitable
 
@@ -22,7 +21,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
 from app.core.config import settings
-from app.core.context import TenantContext, UserContext, set_request_context, clear_request_context, get_current_user
+from app.core.context import TenantContext, UserContext, set_request_context, clear_request_context
 from app.core.security import decode_jwt, create_demo_user_context
 from app.core.rate_limit import check_rate_limit
 

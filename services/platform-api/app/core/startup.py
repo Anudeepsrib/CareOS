@@ -1,8 +1,6 @@
 """Startup utilities (migrations + seeding for local dev)."""
 
-import asyncio
 import subprocess
-import sys
 from pathlib import Path
 
 import structlog

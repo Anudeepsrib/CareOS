@@ -11,7 +11,7 @@ Core clinician use case:
 
 from __future__ import annotations
 
-from typing import TypedDict, List, Dict, Any, Optional
+from typing import TypedDict, List, Dict, Optional
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
 

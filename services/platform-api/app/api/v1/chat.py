@@ -3,7 +3,6 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 import json
-import uuid
 
 from app.core.context import get_current_user, get_current_tenant
 from app.schemas.chat import ChatRequest, ChatResponse, RouteDecision, Citation

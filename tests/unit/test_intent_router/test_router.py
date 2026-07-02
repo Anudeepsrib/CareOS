@@ -5,7 +5,6 @@ These tests are non-negotiable for safety.
 """
 
 import pytest
-import asyncio
 
 from app.services.intent_router.service import route_intent
 

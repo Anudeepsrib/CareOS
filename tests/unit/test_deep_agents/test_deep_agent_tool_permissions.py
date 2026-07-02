@@ -5,7 +5,6 @@ These tests verify that the DeepAgentFactory only grants appropriate tools
 based on route and role — a core production safety requirement.
 """
 
-import pytest
 from services.agent_orchestration_service.app.deep_agents.deep_agent_factory import DeepAgentFactory
 from services.agent_orchestration_service.app.deep_agents.base_deep_agent import DeepAgentContext
 

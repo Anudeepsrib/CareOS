@@ -4,7 +4,7 @@ Memory Extractor - Identifies durable, non-clinical facts worth remembering.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 class MemoryExtractor:

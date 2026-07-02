@@ -13,13 +13,9 @@ Principles:
 
 from __future__ import annotations
 
-import re
-from typing import List
 
-from rapidfuzz import fuzz
 
 from app.schemas.chat import RouteDecision
-from app.core.config import settings
 
 # Safety lexicon (expand in production)
 SAFETY_KEYWORDS = {

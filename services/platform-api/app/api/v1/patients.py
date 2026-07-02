@@ -1,6 +1,6 @@
 """Patient endpoints with proper ABAC."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from app.core.context import get_current_user, get_current_tenant
 from app.core.exceptions import ForbiddenError

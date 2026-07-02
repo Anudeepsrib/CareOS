@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from app.db.session import async_session
 from app.models.conversation import Conversation, Message

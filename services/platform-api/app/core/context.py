@@ -8,9 +8,8 @@ These are the foundation of ABAC + minimum necessary enforcement.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set
 
-from fastapi import Request
 
 # Role hierarchy (higher can do more)
 ROLE_HIERARCHY: Dict[str, int] = {
