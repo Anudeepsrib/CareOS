@@ -6,27 +6,30 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   backend:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install dependencies
-        run: |
-          cd services/platform-api
-          pip install -r requirements.txt
-          pip install pytest ruff pytest-cov bandit pip-audit
-      - name: Ruff lint (strict)
-        run: ruff check --select E9,F63,F7,F82,E,F,W,I,UP,B,SIM,RET,ARG,PL,RUF services/platform-api/app services/memory_service/app services/agent_orchestration_service/app tests
-      - name: Ruff format check
-        run: ruff format --check services/platform-api/app services/memory_service/app services/agent_orchestration_service/app tests || true
+        run: pip install -r services/platform-api/requirements.txt -r requirements-dev.txt
+      - name: Ruff lint
+        run: ruff check .
       - name: Bandit SAST (Python security)
-        run: bandit -r services/platform-api/app services/memory_service/app services/agent_orchestration_service/app -ll --exclude '*/__pycache__/*,*/tests/*' || true
-      - name: pip-audit (dependency vulns - fail on high+)
-        run: pip-audit -r services/platform-api/requirements.txt --fail-on high || echo "pip-audit completed (review output)"
+        run: bandit -r services/platform-api/app services/memory_service/app services/agent_orchestration_service/app -ll --exclude '*/__pycache__/*,*/tests/*'
+      - name: Dependency audit
+        run: pip-audit -r services/platform-api/requirements.txt
       - name: Type check (basic)
         run: |
           cd services/platform-api
@@ -43,11 +46,12 @@ print('memory_service (Hindsight Memory): OK')
 
 print('Imports OK')
 "
-      - name: Run tests with coverage
-        run: python -m pytest tests/unit tests/integration -v --cov=services/platform-api/app --cov-report=term-missing --cov-fail-under=40 || echo "Coverage threshold note: baseline set low for reference impl"
+      - name: Run tests
+        run: python -m pytest
 
   frontend:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -56,20 +60,16 @@ print('Imports OK')
       - name: Install & build
         run: |
           cd apps/web
-          npm install
-          npm run build --if-present
-      - name: Lint
-        run: cd apps/web && npm run lint --if-present || true
+          npm ci
+          npm run build
       - name: Typecheck
-        run: cd apps/web && npm run typecheck --if-present || true
-      - name: npm audit (fail on high+ vulns)
-        run: |
-          cd apps/web
-          npm audit --audit-level=high --production || echo "npm audit: high+ issues found or skipped (review for enterprise)"
-          # To enforce strictly in future: exit 1 on findings after triage
+        run: cd apps/web && npm run typecheck
+      - name: Dependency audit
+        run: cd apps/web && npm audit --audit-level=high --omit=dev
 
   terraform:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
@@ -82,6 +82,7 @@ print('Imports OK')
 
   security:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Trivy filesystem scan (block on CRITICAL)
@@ -99,13 +100,11 @@ print('Imports OK')
           dockerfile: services/platform-api/Dockerfile
           # ignore some for slim base tradeoffs; tune per policy
           failure-threshold: warning
-        continue-on-error: true
       - name: Hadolint web Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: apps/web/Dockerfile
           failure-threshold: warning
-        continue-on-error: true
       - name: Basic secret scan (grep patterns)
         run: |
           echo "Scanning for common hardcoded secrets..."

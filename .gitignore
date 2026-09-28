@@ -50,6 +50,7 @@ node_modules/
 .next/
 out/
 dist/
+*.tsbuildinfo
 
 # Environment
 .env
@@ -91,8 +92,6 @@ logs/
 
 # Test artifacts
 htmlcov/
-.tox/
-.nox/
 coverage/
 *.cover
 

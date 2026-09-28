@@ -1,4 +1,8 @@
-.PHONY: dev up down seed test lint
+.PHONY: install dev up down reset seed test lint
+
+install:
+	python -m pip install -r services/platform-api/requirements.txt -r requirements-dev.txt
+	cd apps/web && npm ci
 
 dev:
 	docker compose up --build
@@ -7,16 +11,19 @@ up:
 	docker compose up -d --build
 
 down:
+	docker compose down
+
+reset:
 	docker compose down -v
 
 seed:
 	docker compose exec platform-api python scripts/seed_demo_data.py
 
 test:
-	python -m pytest tests/ -v --tb=short
+	python -m pytest
 
 lint:
-	python -m ruff check services/platform-api/app services/memory_service/app services/agent_orchestration_service/app tests
+	python -m ruff check .
 	cd apps/web && npm run typecheck
 
 logs-api:

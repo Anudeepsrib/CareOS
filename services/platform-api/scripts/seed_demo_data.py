@@ -6,8 +6,6 @@ Creates realistic but completely fictional clinical data for testing the full go
 import asyncio
 import json
 import uuid
-from datetime import date
-
 from sqlalchemy import text
 
 from app.db.session import async_session

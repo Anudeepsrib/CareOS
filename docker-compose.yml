@@ -1,5 +1,3 @@
-﻿version: '3.9'
-
 # Enterprise docker-compose for local dev + reference prod-like.
 # For real production use: ECS/Fargate, k8s, or compose with override + secrets + external networks.
 # NEVER use these weak dev credentials in any shared or cloud environment.
