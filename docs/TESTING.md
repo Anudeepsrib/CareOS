@@ -47,7 +47,7 @@ We test the **safety architecture** extremely thoroughly because patient safety 
 ## Running Tests Locally
 
 ```bash
-cd services/platform-api
+cd services/platform_api
 python -m pytest tests/ -v --tb=short
 ```
 

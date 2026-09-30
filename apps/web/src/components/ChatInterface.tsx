@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AlertTriangle, Clock } from 'lucide-react';
+import { AlertTriangle, Clock, Fingerprint, GitBranch, ScanSearch, ShieldCheck } from 'lucide-react';
+import type { GovernanceReceipt } from '@/types/api';
 
 interface ChatMessage {
   type: 'system' | 'user' | 'assistant' | 'error';
@@ -12,6 +13,7 @@ interface ChatMessage {
   safety_flags?: string[];
   review_task_id?: string;
   memory_used?: boolean;
+  governance_receipt?: GovernanceReceipt;
 }
 
 interface ChatInterfaceProps {
@@ -69,7 +71,8 @@ export function ChatInterface({ token, selectedUserEmail, userRole }: ChatInterf
         disclaimer: data.disclaimer, 
         safety_flags: data.safety_flags, 
         review_task_id: data.human_review_task_id,
-        memory_used: data.memory_used
+        memory_used: data.memory_used,
+        governance_receipt: data.governance_receipt,
       }]);
     } catch (e) {
       setMessages(prev => [...prev, { type: 'error', content: 'API unreachable. Is docker compose running?' }]);
@@ -87,7 +90,10 @@ export function ChatInterface({ token, selectedUserEmail, userRole }: ChatInterf
   return (
     <div className="flex flex-col h-full bg-slate-950">
       <div className="flex justify-between items-center px-6 py-2 border-b border-slate-800 bg-slate-900">
-        <span className="text-sm font-medium text-slate-300">Active Session</span>
+        <div>
+          <span className="text-sm font-medium text-slate-200">Decision Control Room</span>
+          <span className="ml-2 text-[10px] uppercase tracking-[0.18em] text-cyan-500">evidence → policy → action</span>
+        </div>
         <button onClick={handleClear} className="text-xs text-slate-500 hover:text-slate-300 transition">Clear History</button>
       </div>
 
@@ -129,6 +135,36 @@ export function ChatInterface({ token, selectedUserEmail, userRole }: ChatInterf
                   {m.review_task_id && <span className="text-xs text-amber-400 flex items-center gap-1"><Clock className="w-3 h-3"/> Task created: {m.review_task_id}</span>}
                   {m.memory_used && <span className="text-xs text-purple-400">Governed memory preference applied</span>}
                 </div>
+
+                {m.governance_receipt && (
+                  <details className="mt-3 max-w-3xl rounded-xl border border-cyan-950 bg-cyan-950/20 text-left">
+                    <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-xs font-semibold text-cyan-300">
+                      <span className="flex items-center gap-2"><Fingerprint className="h-4 w-4" /> Governance Receipt</span>
+                      <span className="font-mono text-[10px] font-normal text-slate-500">{m.governance_receipt.audit_event_id}</span>
+                    </summary>
+                    <div className="grid gap-px border-t border-cyan-950 bg-cyan-950 md:grid-cols-3">
+                      <div className="bg-slate-950 p-4">
+                        <GitBranch className="mb-2 h-4 w-4 text-cyan-500" />
+                        <div className="text-[10px] uppercase tracking-wider text-slate-500">Decision path</div>
+                        <div className="mt-1 text-xs text-slate-300">{m.governance_receipt.classifier}</div>
+                        <div className="text-[10px] text-slate-500">→ {m.governance_receipt.generation_model}</div>
+                      </div>
+                      <div className="bg-slate-950 p-4">
+                        <ScanSearch className="mb-2 h-4 w-4 text-cyan-500" />
+                        <div className="text-[10px] uppercase tracking-wider text-slate-500">Evidence boundary</div>
+                        <div className="mt-1 text-xs text-emerald-400">{m.governance_receipt.allowed_evidence_count} allowed</div>
+                        <div className="text-[10px] text-amber-400">{m.governance_receipt.blocked_evidence_count} blocked</div>
+                      </div>
+                      <div className="bg-slate-950 p-4">
+                        <ShieldCheck className="mb-2 h-4 w-4 text-cyan-500" />
+                        <div className="text-[10px] uppercase tracking-wider text-slate-500">Controls applied</div>
+                        <div className="mt-1 text-[10px] leading-5 text-slate-400">
+                          {m.governance_receipt.controls_applied.length ? m.governance_receipt.controls_applied.join(' · ') : 'minimum necessary · tenant scope'}
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                )}
               </div>
             )}
           </div>

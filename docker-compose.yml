@@ -55,7 +55,7 @@ services:
   platform-api:
     build:
       context: .
-      dockerfile: services/platform-api/Dockerfile
+      dockerfile: services/platform_api/Dockerfile
     container_name: careos-api
     environment:
       - DATABASE_URL=postgresql+asyncpg://careos:${POSTGRES_PASSWORD:-careos_dev_password}@postgres:5432/careos
@@ -67,6 +67,11 @@ services:
       - DEFAULT_TENANT_ID=${DEFAULT_TENANT_ID:-tenant_hospital_a}
       - MAX_REQUEST_BYTES=${MAX_REQUEST_BYTES:-10485760}
       - REQUEST_TIMEOUT_SECONDS=${REQUEST_TIMEOUT_SECONDS:-45}
+      - ENABLE_LANGSMITH_EVALS=${ENABLE_LANGSMITH_EVALS:-false}
+      - LANGSMITH_TRACING=${LANGSMITH_TRACING:-false}
+      - LANGSMITH_TRACING_V2=${LANGSMITH_TRACING_V2:-false}
+      - LANGSMITH_PROJECT=${LANGSMITH_PROJECT:-careos-jev-evals}
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
     ports:
       - "8000:8000"
     depends_on:
@@ -76,7 +81,7 @@ services:
         condition: service_healthy
     # Dev volume mounts for hot reload; REMOVE in any prod-like run
     volumes:
-      - ./services/platform-api:/app
+      - ./services/platform_api:/app
       - ./services:/workspace/services
       - ./data:/app/data
     networks:

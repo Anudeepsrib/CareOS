@@ -17,7 +17,7 @@ from ..base_deep_agent import DeepAgentContext
 # Bridge to real RAG service
 import sys
 from pathlib import Path
-PLATFORM_API_ROOT = Path(__file__).resolve().parents[4] / "platform-api"
+PLATFORM_API_ROOT = Path(__file__).resolve().parents[4] / "platform_api"
 if str(PLATFORM_API_ROOT) not in sys.path:
     sys.path.insert(0, str(PLATFORM_API_ROOT))
 

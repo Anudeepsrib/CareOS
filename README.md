@@ -1,12 +1,12 @@
 # careOS
 
 [![CI](https://github.com/Anudeepsrib/CareOS/actions/workflows/ci.yml/badge.svg)](https://github.com/Anudeepsrib/CareOS/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
+![Python](https://img.shields.io/badge/Python-3.14-blue)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688)
 ![Next.js](https://img.shields.io/badge/Web-Next.js%2015-black)
 ![Controls](https://img.shields.io/badge/HIPAA--aware-reference%20controls-6b7280)
 
-careOS is a recruiter-ready flagship case study for a governed hospital AI platform. It demonstrates how to route clinical AI requests through deterministic safety controls, tenant-aware retrieval, human review, audit logging, and role-scoped UI workflows before any model output reaches a user.
+careOS is a governed care-operations control plane. Unlike ClinIQ's focused policy retrieval experience, careOS coordinates role-aware pathways, evidence boundaries, human checkpoints, memory, and audit—and returns a Governance Receipt showing how every AI decision was routed and constrained.
 
 This repository is a **HIPAA-aware reference implementation**, not a product certified as compliant with HIPAA. It maps to relevant Privacy and Security Rule safeguards, but production use with real PHI would still require formal risk analysis, BAAs, clinical validation, live AWS evidence, penetration testing, and organizational policy sign-off.
 
@@ -29,12 +29,13 @@ For the long-form case study, see [docs/CASE_STUDY.md](docs/CASE_STUDY.md).
 
 | Capability | Status | Evidence |
 | --- | --- | --- |
-| Deterministic intent routing with safety overrides | Implemented | `services/platform-api/app/services/intent_router/service.py`, `tests/unit/test_intent_router/test_router.py` |
-| Mandatory MCP context governance before model calls | Implemented | `services/platform-api/app/services/mcp/service.py`, `tests/unit/test_mcp/test_mcp_governance.py` |
-| Tenant-aware RBAC/ABAC context | Implemented | `services/platform-api/app/core/context.py`, `services/platform-api/app/core/middleware.py` |
-| Human review queue and role-filtered resolution | Implemented with DB path and local fallback | `services/platform-api/app/api/v1/reviews.py`, `tests/unit/test_reviews/test_review_authorization.py` |
-| Audit event capture and query endpoints | Implemented with DB path and local fallback | `services/platform-api/app/services/audit/service.py`, `services/platform-api/app/api/v1/audit.py` |
+| Deterministic intent routing with safety overrides | Implemented | `services/platform_api/app/services/intent_router/service.py`, `tests/unit/test_intent_router/test_router.py` |
+| Mandatory MCP context governance before model calls | Implemented | `services/platform_api/app/services/mcp/service.py`, `tests/unit/test_mcp/test_mcp_governance.py` |
+| Tenant-aware RBAC/ABAC context | Implemented | `services/platform_api/app/core/context.py`, `services/platform_api/app/core/middleware.py` |
+| Human review queue and role-filtered resolution | Implemented with DB path and local fallback | `services/platform_api/app/api/v1/reviews.py`, `tests/unit/test_reviews/test_review_authorization.py` |
+| Audit event capture and query endpoints | Implemented with DB path and local fallback | `services/platform_api/app/services/audit/service.py`, `services/platform_api/app/api/v1/audit.py` |
 | Governed Hindsight Memory | Implemented for non-authoritative workflow continuity | `services/memory_service/app/services/hindsight_memory_service.py`, `tests/unit/test_memory/` |
+| Jev-as-a-judge online evaluation | Opt-in through LangSmith Evals | `docs/JEV_LANGSMITH_EVALS.md`, minimized `careos_governed_response` traces |
 | Next.js demo for chat, workflows, review queue, ingestion | Implemented as a single consolidated demo surface | `apps/web/src/app/page.tsx`, `apps/web/src/components/` |
 | CI for backend, frontend, Terraform, and security checks | Implemented as GitHub Actions reference workflow | `.github/workflows/ci.yml` |
 | AWS production reference modules | Implemented as Terraform reference modules | `infra/terraform/modules/`, `infra/terraform/envs/` |
@@ -181,7 +182,7 @@ npm run build
 
 ```text
 apps/web/                         Next.js demo experience
-services/platform-api/            FastAPI API, router, MCP, RAG, audit, review, auth
+services/platform_api/            FastAPI API, router, MCP, RAG, audit, review, auth
 services/agent_orchestration_service/  Deep Agent implementations and tools
 services/memory_service/          Governed Hindsight Memory service
 infra/terraform/                  AWS reference infrastructure modules and envs

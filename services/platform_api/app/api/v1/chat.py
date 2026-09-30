@@ -3,9 +3,11 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 import json
+from langsmith import traceable
 
+from app.core.config import settings
 from app.core.context import get_current_user, get_current_tenant
-from app.schemas.chat import ChatRequest, ChatResponse, RouteDecision, Citation
+from app.schemas.chat import ChatRequest, ChatResponse, RouteDecision, Citation, GovernanceReceipt
 from app.services.intent_router.service import route_intent
 from app.services.mcp.service import MCPContextGovernanceService
 from app.services.rag.service import retrieve_authorized_chunks
@@ -25,10 +27,21 @@ logger = structlog.get_logger(__name__)
 router = APIRouter()
 
 
+@traceable(
+    name="careos_governed_response",
+    run_type="chain",
+    project_name=settings.LANGSMITH_PROJECT,
+    tags=["jev-eval-candidate"],
+)
+def _record_eval_trace(state: dict) -> dict:
+    """Emit a minimized state for the LangSmith-hosted Jev evaluator."""
+    return state
+
+
 @router.post("/route", response_model=RouteDecision)
 async def classify_intent(req: ChatRequest, user=Depends(get_current_user)):
     """Pure intent classification (used by frontend for UI hints + safety)."""
-    decision = await route_intent(req.query, user.role, user.tenant_id)
+    decision = await route_intent(req.query, user.role)
     return decision
 
 
@@ -43,7 +56,7 @@ async def chat(req: ChatRequest, user=Depends(get_current_user)):
     5. Full audit + minimized history
     """
     tenant = get_current_tenant()
-    decision = await route_intent(req.query, user.role, tenant.tenant_id)
+    decision = await route_intent(req.query, user.role)
 
     # 1. Retrieve only what this user is allowed to see
     chunks = []
@@ -151,7 +164,7 @@ async def chat(req: ChatRequest, user=Depends(get_current_user)):
         audit_event_id=audit_event_id,
     )
 
-    return ChatResponse(
+    response = ChatResponse(
         response=generation["text"],
         route=decision.intent,
         confidence=round(decision.confidence, 3),
@@ -161,14 +174,35 @@ async def chat(req: ChatRequest, user=Depends(get_current_user)):
         disclaimer=disclaimer,
         human_review_task_id=review_task_id,
         memory_used=memory_used,
+        governance_receipt=GovernanceReceipt(
+            audit_event_id=audit_event_id,
+            classifier=decision.model_used_for_classification,
+            generation_model=generation.get("model", "unknown"),
+            allowed_evidence_count=len(mcp_decision.allowed_context),
+            blocked_evidence_count=mcp_decision.blocked_context_count,
+            controls_applied=sorted(set(mcp_decision.policy_decisions + mcp_decision.audit_tags)),
+        ),
     )
+    if settings.ENABLE_LANGSMITH_EVALS:
+        _record_eval_trace(
+            {
+                "assistant_response": response.response,
+                "user_role": user.role,
+                "route": response.route,
+                "requires_human_review": response.requires_human_review,
+                "safety_flags": response.safety_flags,
+                "allowed_evidence_count": response.governance_receipt.allowed_evidence_count,
+                "blocked_evidence_count": response.governance_receipt.blocked_evidence_count,
+            }
+        )
+    return response
 
 
 @router.post("/stream")
 async def chat_stream(req: ChatRequest, user=Depends(get_current_user)):
     """Streaming version (SSE) — same safety guarantees as /chat."""
     async def generator():
-        decision = await route_intent(req.query, user.role, get_current_tenant().tenant_id)
+        decision = await route_intent(req.query, user.role)
         yield f"data: {json.dumps({'event': 'route', 'intent': decision.intent, 'confidence': decision.confidence})}\n\n"
 
         chunks = []
@@ -206,7 +240,7 @@ async def rag_query(req: ChatRequest, user=Depends(get_current_user)):
 
 @router.post("/agent/run")
 async def run_deep_agent(req: ChatRequest, user=Depends(get_current_user)):
-    decision = await route_intent(req.query, user.role, get_current_tenant().tenant_id)
+    decision = await route_intent(req.query, user.role)
     route = decision.intent if decision.requires_agent else req.context.get("route", "chart_summary_complex")
     if DeepAgentFactory is None:
         return {"status": "degraded", "message": "Deep Agent package is unavailable in this runtime."}

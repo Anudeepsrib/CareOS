@@ -21,18 +21,18 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.14"
       - name: Install dependencies
-        run: pip install -r services/platform-api/requirements.txt -r requirements-dev.txt
+        run: pip install -r services/platform_api/requirements.txt -r requirements-dev.txt
       - name: Ruff lint
         run: ruff check .
       - name: Bandit SAST (Python security)
-        run: bandit -r services/platform-api/app services/memory_service/app services/agent_orchestration_service/app -ll --exclude '*/__pycache__/*,*/tests/*'
+        run: bandit -r services/platform_api/app services/memory_service/app services/agent_orchestration_service/app -ll --exclude '*/__pycache__/*,*/tests/*'
       - name: Dependency audit
-        run: pip-audit -r services/platform-api/requirements.txt
+        run: pip-audit -r services/platform_api/requirements.txt
       - name: Type check (basic)
         run: |
-          cd services/platform-api
+          cd services/platform_api
           PYTHONPATH=".:/workspace" python -c "
 import app.main
 print('platform-api main: OK')
@@ -97,7 +97,7 @@ print('Imports OK')
       - name: Hadolint Dockerfile lint (Docker best practices)
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: services/platform-api/Dockerfile
+          dockerfile: services/platform_api/Dockerfile
           # ignore some for slim base tradeoffs; tune per policy
           failure-threshold: warning
       - name: Hadolint web Dockerfile

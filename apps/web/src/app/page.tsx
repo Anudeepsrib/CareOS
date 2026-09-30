@@ -32,7 +32,7 @@ export default function Home() {
       <header className="bg-slate-900 border-b border-slate-800 h-14 px-6 flex items-center justify-between shrink-0 shadow-sm z-10">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-            careOS
+            careOS <span className="font-normal text-cyan-500/70">Control Plane</span>
           </h1>
           <div className="h-4 w-px bg-slate-700"></div>
           <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-800/50 px-2.5 py-1 rounded-md border border-slate-700/50">
@@ -81,21 +81,21 @@ export default function Home() {
             onClick={() => setActiveTab('chat')}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${activeTab === 'chat' ? 'bg-blue-600/10 text-blue-400 border border-blue-900/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}
           >
-            <MessageSquare className="w-4 h-4" /> RAG Chat
+            <MessageSquare className="w-4 h-4" /> Decision Control Room
           </button>
           
           <button 
             onClick={() => setActiveTab('workflows')}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${activeTab === 'workflows' ? 'bg-blue-600/10 text-blue-400 border border-blue-900/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}
           >
-            <Activity className="w-4 h-4" /> Agent Workflows
+            <Activity className="w-4 h-4" /> Care Pathways
           </button>
           
           <button 
             onClick={() => setActiveTab('reviews')}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${activeTab === 'reviews' ? 'bg-blue-600/10 text-blue-400 border border-blue-900/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}
           >
-            <CheckSquare className="w-4 h-4" /> Review Queue
+            <CheckSquare className="w-4 h-4" /> Human Checkpoints
           </button>
 
           {(userRole === 'admin' || userRole === 'compliance_officer' || userRole === 'super_admin') && (
@@ -103,14 +103,14 @@ export default function Home() {
               onClick={() => setActiveTab('documents')}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${activeTab === 'documents' ? 'bg-blue-600/10 text-blue-400 border border-blue-900/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}
             >
-              <UploadCloud className="w-4 h-4" /> Document Ingestion
+              <UploadCloud className="w-4 h-4" /> Evidence Registry
             </button>
           )}
 
           <div className="mt-auto space-y-2">
             <div className="text-[10px] text-slate-500 bg-slate-900 p-3 rounded border border-slate-800">
-              <div className="font-semibold text-slate-400 mb-1">Architecture Note</div>
-              Every query routes through the MCP governance layer before hitting the LLM. Data never leaves the tenant boundary.
+              <div className="font-semibold text-cyan-400 mb-1">Why careOS is different</div>
+              ClinIQ finds policy. careOS coordinates governed action and issues a receipt for every AI decision.
             </div>
             <button className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-300 transition w-full">
               <Settings className="w-4 h-4" /> Settings

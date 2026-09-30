@@ -1,5 +1,5 @@
 ﻿# syntax=docker/dockerfile:1
-FROM python:3.11-slim AS base
+FROM python:3.14-slim AS base
 
 # Enterprise hardening labels
 LABEL org.opencontainers.image.title="careOS Platform API" \
@@ -31,13 +31,13 @@ RUN groupadd -r appgroup --gid 1001 && \
 
 # Copy dependency files first for better caching. This Dockerfile is built from
 # the repository root so the platform can import sibling service packages.
-COPY --chown=appuser:appgroup services/platform-api/requirements.txt ./requirements.txt
+COPY --chown=appuser:appgroup services/platform_api/requirements.txt ./requirements.txt
 
 # Keep the dependency source of truth in requirements.txt.
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code plus sibling service packages used by the platform API.
-COPY --chown=appuser:appgroup services/platform-api/ ./
+COPY --chown=appuser:appgroup services/platform_api/ ./
 COPY --chown=appuser:appgroup services /workspace/services
 ENV PYTHONPATH="/app:/workspace"
 

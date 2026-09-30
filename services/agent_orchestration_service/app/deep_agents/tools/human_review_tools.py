@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field, PrivateAttr
 
 from ..base_deep_agent import DeepAgentContext
 
-PLATFORM_ROOT = Path(__file__).resolve().parents[4] / "platform-api"
+PLATFORM_ROOT = Path(__file__).resolve().parents[4] / "platform_api"
 if str(PLATFORM_ROOT) not in sys.path:
     sys.path.insert(0, str(PLATFORM_ROOT))
 

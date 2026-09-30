@@ -1,6 +1,6 @@
 /**
  * TypeScript contracts matching the platform-api backend schemas.
- * Keep these in sync with services/platform-api/app/schemas/*
+ * Keep these in sync with services/platform_api/app/schemas/*
  */
 
 export interface Citation {
@@ -9,6 +9,15 @@ export interface Citation {
   doc_type: string;
   relevance: number;
   snippet: string;
+}
+
+export interface GovernanceReceipt {
+  audit_event_id: string;
+  classifier: string;
+  generation_model: string;
+  allowed_evidence_count: number;
+  blocked_evidence_count: number;
+  controls_applied: string[];
 }
 
 export interface ChatResponse {
@@ -21,6 +30,7 @@ export interface ChatResponse {
   disclaimer?: string | null;
   human_review_task_id?: string | null;
   memory_used?: boolean;
+  governance_receipt: GovernanceReceipt;
 }
 
 export interface ChatRequest {

@@ -1,7 +1,7 @@
 .PHONY: install dev up down reset seed test lint
 
 install:
-	python -m pip install -r services/platform-api/requirements.txt -r requirements-dev.txt
+	python -m pip install -r services/platform_api/requirements.txt -r requirements-dev.txt
 	cd apps/web && npm ci
 
 dev:

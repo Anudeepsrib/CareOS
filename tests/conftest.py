@@ -6,10 +6,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PLATFORM_API = ROOT / "services" / "platform-api"
+PLATFORM_API = ROOT / "services" / "platform_api"
 
 for path in (ROOT, PLATFORM_API):
     path_str = str(path)
     if path_str not in sys.path:
         sys.path.insert(0, path_str)
-

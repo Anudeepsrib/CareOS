@@ -32,6 +32,15 @@ class Citation(BaseModel):
     snippet: str
 
 
+class GovernanceReceipt(BaseModel):
+    audit_event_id: str
+    classifier: str
+    generation_model: str
+    allowed_evidence_count: int
+    blocked_evidence_count: int
+    controls_applied: List[str] = Field(default_factory=list)
+
+
 class ChatResponse(BaseModel):
     response: str
     route: str
@@ -42,3 +51,4 @@ class ChatResponse(BaseModel):
     disclaimer: Optional[str] = None
     human_review_task_id: Optional[str] = None
     memory_used: bool = False
+    governance_receipt: GovernanceReceipt

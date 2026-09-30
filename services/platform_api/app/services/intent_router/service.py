@@ -13,8 +13,6 @@ Principles:
 
 from __future__ import annotations
 
-
-
 from app.schemas.chat import RouteDecision
 
 # Safety lexicon (expand in production)
@@ -26,8 +24,6 @@ SAFETY_KEYWORDS = {
     "stroke_signs": ["face drooping", "arm weakness", "speech difficulty", "sudden numbness"],
 }
 
-EMERGENCY_OVERRIDE_ROUTES = {"clinical_safety_triage"}
-
 ROLE_DEFAULTS = {
     "patient": "simple_rag",
     "clinician": "simple_rag",
@@ -37,7 +33,7 @@ ROLE_DEFAULTS = {
 }
 
 
-async def route_intent(query: str, role: str, tenant_id: str) -> RouteDecision:
+async def route_intent(query: str, role: str) -> RouteDecision:
     """
     Hybrid intent classification with strong safety bias.
     """
@@ -136,25 +132,12 @@ async def route_intent(query: str, role: str, tenant_id: str) -> RouteDecision:
     # 4. Role-based default
     default_intent = ROLE_DEFAULTS.get(role, "simple_rag")
 
-    # 5. LLM fallback (mocked for now - would call Bedrock Claude Haiku)
-    # In production we would call the model router here with structured output
-    llm_confidence = 0.71
-    if llm_confidence > 0.65:
-        return RouteDecision(
-            intent=default_intent,
-            confidence=llm_confidence,
-            requires_rag=default_intent in {"simple_rag", "agentic_workflow"},
-            requires_agent=default_intent in {"agentic_workflow", "discharge_planning"},
-            data_sources=["clinical_notes"],
-            reason="LLM fallback classification (mock). Defaulted based on role and query patterns.",
-        )
-
-    # 6. Ultimate safe fallback
+    # 5. Local fallback
     return RouteDecision(
-        intent="simple_rag",
-        confidence=0.55,
-        requires_rag=True,
-        requires_human_review=True,
-        safety_flags=["low_confidence_fallback"],
-        reason="Low confidence in classification. Defaulting to safest grounded retrieval path with human review.",
+        intent=default_intent,
+        confidence=0.71,
+        requires_rag=default_intent in {"simple_rag", "agentic_workflow"},
+        requires_agent=default_intent in {"agentic_workflow", "discharge_planning"},
+        data_sources=["clinical_notes"],
+        reason="Defaulted based on role and query patterns.",
     )

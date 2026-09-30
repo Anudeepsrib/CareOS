@@ -4,7 +4,6 @@ Enterprise: supports *_FILE for docker/k8s secrets (no env var leak in ps).
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 from pydantic import model_validator
@@ -75,6 +74,8 @@ class Settings(BaseSettings):
     # Model routing (mock by default)
     MODEL_ROUTER_DEFAULT: str = "mock-bedrock-claude-3.5-sonnet"
     EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
+    ENABLE_LANGSMITH_EVALS: bool = False
+    LANGSMITH_PROJECT: str = "careos-jev-evals"
 
     # Feature flags
     ENABLE_MEMORY_SERVICE: bool = True
@@ -106,22 +107,7 @@ def _read_secret_file(path: str | None) -> str | None:
     return None
 
 
-# Post-init secret file support (e.g. JWT_SECRET_FILE=/run/secrets/jwt_secret)
-def apply_secret_files(s: "Settings") -> "Settings":
-    for secret_field, file_field in [
-        ("JWT_SECRET", "JWT_SECRET_FILE"),
-        ("DATABASE_URL", "DATABASE_URL_FILE"),
-    ]:
-        file_val = getattr(s, file_field, None) or os.environ.get(file_field)
-        content = _read_secret_file(file_val)
-        if content:
-            setattr(s, secret_field, content)
-    return s
-
-
 settings = Settings()
-# Apply any remaining secret files from env (for cases where field not populated yet)
-apply_secret_files(settings)
 
 
 def validate_runtime_settings() -> list[str]:
